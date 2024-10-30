@@ -40,7 +40,7 @@ const Sidebar = () => {
                 <Button variant="ghost"
                     className={`flex flex-col items-center  py-7 w-full ${activeMenu === 'Shapes' ? 'bg-white shadow hover:bg-white' : null}`}
                     onClick={() => handleMenuClick('Shapes')}>
-                    <Square className="w-6 h-6 mb-1" />
+                    <Square className="w-6 h-6 mb-0" />
                     <span className="text-xs">Shapes</span>
                 </Button>
 
@@ -54,14 +54,14 @@ const Sidebar = () => {
                 <Button variant="ghost"
                     className={`flex flex-col items-center py-7 w-full ${activeMenu === 'Images' ? 'bg-white shadow hover:bg-white' : null}`}
                     onClick={() => handleMenuClick('Images')}>
-                    <Image className="w-6 h-6 mb-1" />
+                    <Image className="w-6 h-6 mb-0" />
                     <span className="text-xs">Images</span>
                 </Button>
 
                 <Button variant="ghost"
                     className={`flex flex-col items-center py-7 w-full ${activeMenu === 'Uploads' ? 'bg-white shadow hover:bg-white' : null}`}
                     onClick={() => handleMenuClick('Uploads')}>
-                    <UploadCloud className="w-6 h-6 mb-1" />
+                    <UploadCloud className="w-6 h-6 mb-0" />
                     <span className="text-xs">Uploads</span>
                 </Button>
 
