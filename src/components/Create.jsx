@@ -111,14 +111,36 @@ const KonvaCanvas = () => {
                                 y: shape.y,
                                 draggable: true,
                                 onClick: (e) => handleSelect(shape.id, e.target.x(), e.target.y()),
+                                onTap: (e) => handleSelect(shape.id, e.target.x(), e.target.y()),
                                 onDragMove: (e) => handleDragMove({ ...shape, x: e.target.x(), y: e.target.y() }),
                             };
                             if (shape.type === 'rectangle') {
-                                return <Rect key={shape.id} {...commonProps} width={150} height={80} fill="gray" />;
+                                return <Rect key={shape.id} {...commonProps} width={150} height={80} fill="gray" 
+                                        onTransformEnd={(e) => {
+                                            const node = e.target;
+                                            const newShapes = shapes.map((s) =>
+                                                s.id === shape.id ? { ...s, width: node.width(), height: node.height() } : s
+                                            );
+                                            setShapes(newShapes);
+                                        }}/>;
                             } else if (shape.type === 'circle') {
-                                return <Circle key={shape.id} {...commonProps} radius={80} fill="gray" />;
+                                return <Circle key={shape.id} {...commonProps} radius={80} fill="gray" 
+                                        onTransformEnd={(e) => {
+                                            const node = e.target;
+                                            const newShapes = shapes.map((s) =>
+                                                s.id === shape.id ? { ...s, width: node.width(), height: node.height() } : s
+                                            );
+                                            setShapes(newShapes);
+                                        }}/>;
                             } else if (shape.type === 'square') {
-                                return <Rect key={shape.id} {...commonProps} width={100} height={100} fill="gray" />;
+                                return <Rect key={shape.id} {...commonProps} width={100} height={100} fill="gray" 
+                                        onTransformEnd={(e) => {
+                                            const node = e.target;
+                                            const newShapes = shapes.map((s) =>
+                                                s.id === shape.id ? { ...s, width: node.width(), height: node.height() } : s
+                                            );
+                                            setShapes(newShapes);
+                                        }}/>;
                             }
                             return null;
                         })}
