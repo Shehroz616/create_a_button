@@ -1,14 +1,17 @@
 'use client'
 
-import React, { useState } from 'react';
-import { Square, Type, Image, UploadCloud } from 'lucide-react';
+import React, { useState, useContext } from 'react';
+import { ShapesContext } from '@/context/context';
+import { Square, Type, Image, UploadCloud, X } from 'lucide-react';
 import { Button } from './ui/button'
 import Shapes from './shapes';
+import Colors from './colors';
 
 const Sidebar = () => {
 
     const [activeMenu, setActiveMenu] = useState(null);
     const [menuName, setMenuName] = useState('');
+    const { innerMenuName, subActiveMenu, setSubActiveMenu} = useContext(ShapesContext);
 
     // Content based on the active menu
     const renderContent = () => {
@@ -16,13 +19,13 @@ const Sidebar = () => {
             case 'Shapes':
                 return <Shapes />
             case 'Text':
-                
+
                 return <div>Text content here...</div>;
             case 'Images':
-                
+
                 return <div>Images content here...</div>;
             case 'Uploads':
-                
+
                 return <div>Uploads content here...</div>;
             default:
                 return;
@@ -31,7 +34,7 @@ const Sidebar = () => {
 
     const handleMenuClick = (menu) => {
         setActiveMenu(activeMenu === menu ? null : menu);
-        setMenuName(activeMenu === menu ? '' : menu); 
+        setMenuName(activeMenu === menu ? '' : menu);
     };
 
     return (
@@ -66,14 +69,29 @@ const Sidebar = () => {
                 </Button>
 
             </div>
-            <div
-                className={`border-r border-gray-200 bg-gray-100 backdrop-blur-lg transition-all duration-300 overflow-hidden ${activeMenu ? 'w-64' : 'w-0'} overflow-hidden border-l border-gray-300`}>
-                <div className='p-4 border-b border-gray-300'>
-                    {menuName}
+            <div className={`relative transition-all duration-300 ${activeMenu || subActiveMenu ? 'w-64' : 'w-0'} `}>
+                <div
+                    className={`border-r border-l border-gray-300 bg-gray-100 transition-all duration-300  ${activeMenu ? 'w-64' : 'w-0'} overflow-hidden  h-full`}>
+                    <div className='flex justify-between px-4 py-3 border-b border-gray-300'>
+                        {menuName}
+                        <Button className="p-0 h-auto" variant="ghost" onClick={() => setActiveMenu(null)}>
+                            <X size={20} color="#454545" strokeWidth={1.25} />
+                        </Button>
+                    </div>
+                    <div className='p-4 w-max min-w-full'>
+                        {renderContent()}
+                    </div>
                 </div>
-                <div className='p-4 w-max min-w-full'>
-
-                    {renderContent()}
+                <div className={`z-10 absolute top-0 left-0 h-full transition-all duration-300 overflow-hidden ${subActiveMenu ? 'w-64' : 'w-0'} bg-gray-100`}>
+                    <div className='flex justify-between px-4 py-3 border-b border-gray-300'>
+                        {innerMenuName}
+                        <Button className="p-0 h-auto" variant="ghost" onClick={() => setSubActiveMenu(null)}>
+                            <X size={20} color="#454545" strokeWidth={1.25} />
+                        </Button>
+                    </div>
+                    <div className='p-4 w-max min-w-full'>
+                        <Colors/>
+                    </div>
                 </div>
             </div>
         </div>

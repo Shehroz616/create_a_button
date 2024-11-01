@@ -1,6 +1,7 @@
 import KonvaCanvas from "@/components/Create"
 import TopBar from "@/components/editorTopBar"
 import Sidebar from "@/components/editorSideBar"
+import InnerTopBar from "@/components/innerTopbar"
 
 const page = () => {
   return (
@@ -8,7 +9,10 @@ const page = () => {
         <TopBar/>
         <div className="flex items-start items-stretch"  style={{height: 'calc(100vh - 65px)'}}>
           <Sidebar/>
-          <KonvaCanvas />
+          <div className="w-full h-full">
+            <InnerTopBar />
+            <KonvaCanvas />
+          </div>
         </div>
     </div>
   )

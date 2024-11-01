@@ -79,3 +79,23 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes slideUp {
+  from {
+      opacity: 0;
+      transform: translateY(20px) translateX(-50%);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0) translateX(-50%);
+  }
+}
+
+
+.custom-sketch-picker .flexbox-fix:nth-child(3) {
+  display: none !important;
+}
+.custom-sketch-picker{
+  background: transparent !important;
+  box-shadow: none !important;
+}
