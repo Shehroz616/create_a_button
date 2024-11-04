@@ -10,25 +10,21 @@ const TopBar = () => {
             <Link href='/' className='flex z-40 font-semibold'>
                 CreateA<span className='text-green-600'> Button</span>
             </Link>
-            <div className="flex space-x-4">
-                <Button className="flex items-center" onClick={() => console.log('Undo')}>
+            <div className="flex space-x-2">
+                <Button className="flex items-center p-2 h-auto" onClick={() => console.log('Undo')}>
                     <Undo className="text-white" />
-                    <span className="text-white">Undo</span>
                 </Button>
 
-                <Button className="flex items-center" onClick={() => console.log('Redo')}>
+                <Button className="flex items-center p-2 h-auto" onClick={() => console.log('Redo')}>
                     <Redo className="text-white" />
-                    <span className="text-white">Redo</span>
                 </Button>
 
-                <Button className="flex items-center" onClick={() => console.log('Zoom In')}>
+                <Button className="flex items-center p-2 h-auto" onClick={() => console.log('Zoom In')}>
                     <ZoomIn className="text-white" />
-                    <span className="text-white">Zoom In</span>
                 </Button>
 
-                <Button className="flex items-center" onClick={() => console.log('Zoom Out')}>
+                <Button className="flex items-center p-2 h-auto" onClick={() => console.log('Zoom Out')}>
                     <ZoomOut className="text-white" />
-                    <span className="text-white">Zoom Out</span>
                 </Button>
             </div>
         </div>

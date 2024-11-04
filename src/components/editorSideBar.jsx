@@ -6,6 +6,7 @@ import { Square, Type, Image, UploadCloud, X } from 'lucide-react';
 import { Button } from './ui/button'
 import Shapes from './shapes';
 import Colors from './colors';
+import Texts from './texts';
 
 const Sidebar = () => {
 
@@ -19,8 +20,7 @@ const Sidebar = () => {
             case 'Shapes':
                 return <Shapes />
             case 'Text':
-
-                return <div>Text content here...</div>;
+                return <Texts />;
             case 'Images':
 
                 return <div>Images content here...</div>;

@@ -91,11 +91,29 @@ body {
   }
 }
 
-
-.custom-sketch-picker .flexbox-fix:nth-child(3) {
-  display: none !important;
+.react-colorful~input{
+    background: transparent !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: var(--radius) !important; 
+    outline: none !important;
+    margin-top: 15px !important;
+    padding: 5px 10px !important;
 }
-.custom-sketch-picker{
-  background: transparent !important;
-  box-shadow: none !important;
+.react-colorful__hue-pointer {
+  width: 14px !important;
+  height: 14px !important;
+}
+.react-colorful__saturation-pointer{
+  width: 14px !important;
+  height: 14px !important;
+}
+.react-colorful{
+  width: 100% !important;
+}
+.react-colorful__hue{
+  margin-top: 15px !important;
+  border-radius: var(--radius) !important;
+}
+.react-colorful__saturation{
+  border-radius: var(--radius) !important;
 }

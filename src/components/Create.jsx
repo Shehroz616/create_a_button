@@ -1,15 +1,17 @@
 'use client';
 
 import { useContext, useState, useRef, useEffect } from 'react';
-import { Stage, Layer, Rect, Circle, Transformer } from 'react-konva';
+import { Stage, Layer, Rect, Circle, Transformer, Text } from 'react-konva';
 import { ShapesContext } from '@/context/context';
 import { CopyPlus, Trash2} from 'lucide-react';
 
 const KonvaCanvas = () => {
-    const { shapes, setShapes, shapesTopBar, setshapesTopBar } = useContext(ShapesContext);
-    const [selectedShapeId, setSelectedShapeId] = useState(null);
+    const { shapes, setShapes, shapesTopBar, setshapesTopBar, selectedShapeId, setSelectedShapeId } = useContext(ShapesContext);
     const [containerSize, setContainerSize] = useState({ width: 500, height: 500 });
     const [popupPosition, setPopupPosition] = useState(null);
+    const [textPosition, setTextPosition] = useState(null);
+    const [editingText, setEditingText] = useState('');
+    const [textFocus, setTextFocus] = useState(false);
     const transformerRef = useRef(null);
     const stageRef = useRef(null);
     const containerRef = useRef(null);
@@ -19,6 +21,8 @@ const KonvaCanvas = () => {
         const { width, height } = rect;
         let xx = x+width/2
         setPopupPosition({ xx, y });
+        setTextPosition({ x, y });
+
         setshapesTopBar(true);
     };
 
@@ -29,6 +33,7 @@ const KonvaCanvas = () => {
             transformerRef.current.getLayer().batchDraw();
             const { x, y, width, height } = selectedNode.getClientRect();
             setPopupPosition({ x: x + width / 2, y });
+            setTextPosition({ x, y });
         } else {
             transformerRef.current.nodes([]);
         }
@@ -68,16 +73,28 @@ const KonvaCanvas = () => {
         setShapes(newShapes);
         setSelectedShapeId(null);
         setPopupPosition(null);
+        setTextPosition(null);
         setshapesTopBar(false);
     };
 
     const handleDuplicate = () => {
         const shapeToDuplicate = shapes.find((s) => s.id === selectedShapeId);
         if (shapeToDuplicate) {
-            const newShape = { ...shapeToDuplicate, id: Date.now(), x: shapeToDuplicate.x + 10, y: shapeToDuplicate.y + 10 };
-            console.log(newShape)
+            const newShape = { ...shapeToDuplicate, id: Date.now(), x: shapeToDuplicate.x + 20, y: shapeToDuplicate.y + 20 };
             setShapes([...shapes, newShape]);
         }
+    };
+
+    const handleTextChange = (e) => {
+        const newText = e.target.value;
+        setEditingText(newText);
+        const newShapes = shapes.map((shape) => {
+          if (shape.id === selectedShapeId) {
+            return { ...shape, text: newText };
+          }
+          return shape;
+        });
+        setShapes(newShapes);
     };
 
     const boxSize = containerSize.width / 20;
@@ -111,7 +128,10 @@ const KonvaCanvas = () => {
                         if (e.target === e.target.getStage()) {
                             setSelectedShapeId(null);
                             setPopupPosition(null);
+                            setTextPosition(null);
                             setshapesTopBar(false);
+                            setTextFocus(false);
+                            setEditingText(null);
                         }
                     }}
                 >
@@ -121,48 +141,37 @@ const KonvaCanvas = () => {
                                 id: shape.id.toString(),
                                 x: shape.x,
                                 y: shape.y,
+                                fill: shape.fill,
+                                width: shape.width,
+                                height: shape.height,
+                                radius: shape.radius,
                                 draggable: true,
                                 onClick: (e) => handleSelect(shape.id, e.target.x(), e.target.y(), e.target.getClientRect()),
                                 onTap: (e) => handleSelect(shape.id, e.target.x(), e.target.y(), e.target.getClientRect()),
                                 onDragMove: (e) => handleDragMove({ ...shape, x: e.target.x(), y: e.target.y() }),
+                                onTransformEnd: (e) => {
+                                    const node = e.target;
+                                    const width = node.width() * node.scaleX();
+                                    const height = node.height() * node.scaleY();
+                                    const newShapes = shapes.map((s) =>
+                                        s.id === shape.id ? { ...s, width: width, height: height } : s
+                                    );
+                                    setPopupPosition({ x: node.x() + width / 2, y: node.y() });
+                                    setTextPosition({ x: node.x(), y: node.y() });
+                                    setShapes(newShapes);
+                                    node.scaleX(1);
+                                    node.scaleY(1);
+                                }
                             };
 
                             if (shape.type === 'rectangle') {
-                                return <Rect key={shape.id} {...commonProps} width={150} height={80} fill="gray" 
-                                        onTransformEnd={(e) => {
-                                            const node = e.target;
-                                            const { width, height } = node.getClientRect();
-                                            const newShapes = shapes.map((s) =>
-                                                s.id === shape.id ? { ...s, width: width, height: height } : s
-                                            );
-                                            console.log(newShapes)
-                                            setShapes(newShapes);
-                                            setPopupPosition({ x: node.x() + width / 2, y: node.y() });
-                                        }}/>;
+                                return <Rect key={shape.id} {...commonProps} />;
                             } else if (shape.type === 'circle') {
-                                return <Circle key={shape.id} {...commonProps} radius={80} fill="gray" 
-                                        onTransformEnd={(e) => {
-                                            const node = e.target;
-                                            const { width, height } = node.getClientRect();
-                                            const newShapes = shapes.map((s) =>
-                                                s.id === shape.id ? { ...s, width: width, height: height } : s
-                                            );
-                                            console.log(width, height)
-                                            setShapes(newShapes);
-                                            setPopupPosition({ x: node.x() + width / 2, y: node.y() });
-                                        }}/>;
+                                return <Circle key={shape.id} {...commonProps} />;
                             } else if (shape.type === 'square') {
-                                return <Rect key={shape.id} {...commonProps} width={100} height={100} fill="gray" 
-                                        onTransformEnd={(e) => {
-                                            const node = e.target;
-                                            const { width, height } = node.getClientRect();
-                                            const newShapes = shapes.map((s) =>
-                                                s.id === shape.id ? { ...s, width: width, height: height } : s
-                                            );
-                                            setShapes(newShapes);
-                                            console.log(width, height)
-                                            setPopupPosition({ x: node.x() + width / 2, y: node.y() });
-                                        }}/>;
+                                return <Rect key={shape.id} {...commonProps} />;
+                            } else if (shape.type === 'text') {
+                                return <Text onDblClick={()=>{setEditingText(shape.text);setTextFocus(true);}} key={shape.id} {...commonProps} text={shape.text} fontSize={shape.fontSize}/>;
                             }
                             return null;
                         })}
@@ -192,6 +201,22 @@ const KonvaCanvas = () => {
                         <button onClick={handleDelete}><Trash2 strokeWidth={1} size={20}/></button>
                         <button onClick={handleDuplicate}><CopyPlus strokeWidth={1} size={20} /></button>
                     </div>
+                )}
+
+                {textFocus && selectedShapeId && shapes.find((shape) => shape.id === selectedShapeId)?.type === 'text' && (
+                    <textarea 
+                        onChange={handleTextChange} 
+                        className='border-0 p-0 bg-gray-100 absolute outline-none'
+                        style={{
+                            top: textPosition.y - 5,
+                            left: textPosition.x - 5,
+                            padding: '5px',
+                            width: shapes.find((shape) => shape.id === selectedShapeId)?.width +5,
+                            height: shapes.find((shape) => shape.id === selectedShapeId)?.height +5,
+                            lineHeight: 1,
+                            fontSize: shapes.find((shape) => shape.id === selectedShapeId)?.fontSize,
+                        }}>
+                        {editingText}</textarea>
                 )}
             </div>
         </div>

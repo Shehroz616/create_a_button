@@ -1,26 +1,31 @@
 'use client';
 
-import { useState } from 'react';
-import { SketchPicker } from 'react-color';
+import { useState, useContext, useEffect } from 'react';
+import { HexColorPicker, HexColorInput } from 'react-colorful';
+import { ShapesContext } from '@/context/context';
 
 const Colors = () => {
-  const [color, setColor] = useState({ r: 255, g: 255, b: 255, a: 1 });
+  const [color, setColor] = useState('#121212');
+  const { shapes, setShapes, selectedShapeId } = useContext(ShapesContext);
 
-  const handleChangeComplete = (color) => {
-    setColor(color.rgb);
-  };
+  const updateColor = (e) => {
+    const newShapes = shapes.map((shape) => {
+      if (shape.id === selectedShapeId) {
+        return { ...shape, fill: e };
+      }
+      return shape;
+    });
+    setColor(e);
+    setShapes(newShapes);
+  }
 
   return (
     <div className="flex flex-col items-center bg-gray-100 rounded-lg">
-      <SketchPicker
-        color={color}
-        onChangeComplete={handleChangeComplete}
-        className="custom-sketch-picker"
-      />
-      <div
-        className="mt-4 w-16 h-16 rounded-full"
-        style={{ backgroundColor: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})` }}
-      />
+      <HexColorPicker color={color} onChange={updateColor} />
+      <div className="flex justify-between mt-5 items-center">
+        <span>Hex</span>
+        <HexColorInput color={color} onChange={updateColor} className='outline-0 bg-gray-100 py-1 px-3 w-7/12 text-sm border border-gray-300 rounded-sm'/>
+      </div>
     </div>
   );
 };
