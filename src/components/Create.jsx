@@ -7,11 +7,12 @@ import { CopyPlus, Trash2} from 'lucide-react';
 
 const KonvaCanvas = () => {
     const { shapes, setShapes, shapesTopBar, setshapesTopBar, selectedShapeId, setSelectedShapeId } = useContext(ShapesContext);
-    const [containerSize, setContainerSize] = useState({ width: 500, height: 500 });
+    // const [containerSize, setContainerSize] = useState({ width: 500, height: 500 });
     const [popupPosition, setPopupPosition] = useState(null);
     const [textPosition, setTextPosition] = useState(null);
     const [editingText, setEditingText] = useState('');
     const [textFocus, setTextFocus] = useState(false);
+    const [showTransformer, setShowTransformer] = useState(true);
     const transformerRef = useRef(null);
     const stageRef = useRef(null);
     const containerRef = useRef(null);
@@ -27,15 +28,17 @@ const KonvaCanvas = () => {
     };
 
     useEffect(() => {
-        const selectedNode = stageRef.current?.findOne(`#${selectedShapeId}`);
-        if (selectedNode) {
-            transformerRef.current.nodes([selectedNode]);
-            transformerRef.current.getLayer().batchDraw();
-            const { x, y, width, height } = selectedNode.getClientRect();
-            setPopupPosition({ x: x + width / 2, y });
-            setTextPosition({ x, y });
-        } else {
-            transformerRef.current.nodes([]);
+        if (transformerRef.current && stageRef.current) {
+            const selectedNode = stageRef.current.findOne(`#${selectedShapeId}`);
+            if (selectedNode) {
+                transformerRef.current.nodes([selectedNode]);
+                transformerRef.current.getLayer().batchDraw();
+                const { x, y, width, height } = selectedNode.getClientRect();
+                setPopupPosition({ x: x + width / 2, y });
+                setTextPosition({ x, y });
+            } else {
+                transformerRef.current.nodes([]);
+            }
         }
     }, [selectedShapeId, shapes]);
 
@@ -43,10 +46,10 @@ const KonvaCanvas = () => {
         const handleResize = () => {
             if (containerRef.current) {
                 const { offsetWidth, offsetHeight } = containerRef.current;
-                setContainerSize({
-                    width: offsetWidth * 0.4,
-                    height: offsetHeight * 0.6,
-                });
+                // setContainerSize({
+                //     width: offsetWidth * 0.4,
+                //     height: offsetHeight * 0.6,
+                // });
             }
         };
 
@@ -75,6 +78,9 @@ const KonvaCanvas = () => {
         setPopupPosition(null);
         setTextPosition(null);
         setshapesTopBar(false);
+        setTextFocus(false);
+        setEditingText(null);
+        setShowTransformer(true);
     };
 
     const handleDuplicate = () => {
@@ -97,13 +103,13 @@ const KonvaCanvas = () => {
         setShapes(newShapes);
     };
 
-    const boxSize = containerSize.width / 20;
-    const rows = Math.ceil(containerSize.height / boxSize);
-    const cols = Math.ceil(containerSize.width / boxSize);
+    // const boxSize = containerSize.width / 20;
+    // const rows = Math.ceil(containerSize.height / boxSize);
+    // const cols = Math.ceil(containerSize.width / boxSize);
 
     return (
         <div className='w-full flex items-center justify-center' style={{height: 'calc(100% - 65px)'}} ref={containerRef}>
-            <div className='bg-gray-100 border border-gray-300' style={{ position: 'relative', width: '40%', height: '60%' }}>
+            <div className='bg-gray-100 border border-gray-300 overflow-hidden rounded-full aspect-square' style={{ position: 'relative', width: '500px' }}>
                 {/* Checkerboard Background */}
                 {/* <Stage width={containerSize.width} height={containerSize.height}>
                     <Layer>
@@ -123,7 +129,7 @@ const KonvaCanvas = () => {
                 </Stage> */}
 
                 {/* Transparent Canvas Overlay */}
-                <Stage ref={stageRef} width={containerSize.width} height={containerSize.height} style={{ position: 'absolute', top: 0, left: 0 }}
+                <Stage ref={stageRef} width={500} height={500} style={{borderRadius:'50%', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                     onMouseDown={(e) => {
                         if (e.target === e.target.getStage()) {
                             setSelectedShapeId(null);
@@ -132,6 +138,7 @@ const KonvaCanvas = () => {
                             setshapesTopBar(false);
                             setTextFocus(false);
                             setEditingText(null);
+                            setShowTransformer(true);
                         }
                     }}
                 >
@@ -171,11 +178,29 @@ const KonvaCanvas = () => {
                             } else if (shape.type === 'square') {
                                 return <Rect key={shape.id} {...commonProps} />;
                             } else if (shape.type === 'text') {
-                                return <Text onDblClick={()=>{setEditingText(shape.text);setTextFocus(true);}} key={shape.id} {...commonProps} text={shape.text} fontSize={shape.fontSize}/>;
+                                return <Text onDblClick={()=>{setEditingText(shape.text);setTextFocus(true);setShowTransformer(false);}} key={shape.id} {...commonProps} text={shape.text} fontSize={shape.fontSize}
+                                        onTransform={(e)=>{
+                                            const node = e.target;
+                                            const width = node.width() * node.scaleX();
+                                            const height = node.height() * node.scaleY();
+                                            const newShapes = shapes.map((s) =>
+                                                s.id === shape.id ? { ...s, width: width, height: height } : s
+                                            );
+                                            setPopupPosition({ x: node.x() + width / 2, y: node.y() });
+                                            setTextPosition({ x: node.x(), y: node.y() });
+                                            setShapes(newShapes);
+                                            node.scaleX(1);
+                                            node.scaleY(1);
+                                        }}/>;
                             }
                             return null;
                         })}
-                        <Transformer ref={transformerRef} boundBoxFunc={(oldBox, newBox) => (newBox.width < 20 || newBox.height < 20 ? oldBox : newBox)} />
+                        {showTransformer && (
+                            <Transformer
+                                ref={transformerRef}
+                                boundBoxFunc={(oldBox, newBox) => (newBox.width < 20 || newBox.height < 20 ? oldBox : newBox)}
+                            />
+                        )}
                     </Layer>
                 </Stage>
 
@@ -206,11 +231,10 @@ const KonvaCanvas = () => {
                 {textFocus && selectedShapeId && shapes.find((shape) => shape.id === selectedShapeId)?.type === 'text' && (
                     <textarea 
                         onChange={handleTextChange} 
-                        className='border-0 p-0 bg-gray-100 absolute outline-none'
+                        className='border-0 p-1 bg-gray-100 absolute outline-none overflow-hidden resize-none'
                         style={{
                             top: textPosition.y - 5,
                             left: textPosition.x - 5,
-                            padding: '5px',
                             width: shapes.find((shape) => shape.id === selectedShapeId)?.width +5,
                             height: shapes.find((shape) => shape.id === selectedShapeId)?.height +5,
                             lineHeight: 1,
