@@ -83,6 +83,19 @@ const KonvaCanvas = () => {
         setShowTransformer(true);
     };
 
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (e.key === 'Delete') {
+            handleDelete();
+          }
+        };
+    
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+          window.removeEventListener('keydown', handleKeyDown);
+        };
+    });
+
     const handleDuplicate = () => {
         const shapeToDuplicate = shapes.find((s) => s.id === selectedShapeId);
         if (shapeToDuplicate) {
@@ -231,10 +244,13 @@ const KonvaCanvas = () => {
                 {textFocus && selectedShapeId && shapes.find((shape) => shape.id === selectedShapeId)?.type === 'text' && (
                     <textarea 
                         onChange={handleTextChange} 
-                        className='border-0 p-1 bg-gray-100 absolute outline-none overflow-hidden resize-none'
+                        className='border-0 bg-transparent absolute outline-none overflow-hidden resize-none'
                         style={{
                             top: textPosition.y - 5,
                             left: textPosition.x - 5,
+                            padding:'4px 5px',
+                            color: "transparent",
+                            caretColor: 'green',
                             width: shapes.find((shape) => shape.id === selectedShapeId)?.width +5,
                             height: shapes.find((shape) => shape.id === selectedShapeId)?.height +5,
                             lineHeight: 1,

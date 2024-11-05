@@ -14,8 +14,8 @@ const Shapes = () => {
             id: shapes.length + 1,
             fill:"gray",
             type,
-            x: 50 + shapes.length * 10, // Different position for each shape
-            y: 50 + shapes.length * 10,
+            x: 150 + shapes.length * 10, // Different position for each shape
+            y: 150 + shapes.length * 10,
             width: width,
             height: height,
         };
