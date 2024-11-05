@@ -109,7 +109,7 @@ const KonvaCanvas = () => {
 
     return (
         <div className='w-full flex items-center justify-center' style={{height: 'calc(100% - 65px)'}} ref={containerRef}>
-            <div className='bg-gray-100 border border-gray-300 overflow-hidden rounded-full aspect-square' style={{ position: 'relative', width: '500px' }}>
+            <div className='bg-white border border-gray-300 overflow-hidden rounded-full aspect-square' style={{ position: 'relative', width: '500px' }}>
                 {/* Checkerboard Background */}
                 {/* <Stage width={containerSize.width} height={containerSize.height}>
                     <Layer>

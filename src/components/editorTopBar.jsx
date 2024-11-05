@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const TopBar = () => {
     return (
-        <div className="flex items-center justify-between border-b border-gray-300 bg-white/75 backdrop-blur-lg transition-all p-3 ">
+        <div className="flex items-center justify-between bg-white/75 backdrop-blur-lg transition-all p-3 ">
             <Link href='/' className='flex z-40 font-semibold'>
                 CreateA<span className='text-green-600'> Button</span>
             </Link>

@@ -7,7 +7,7 @@ const page = () => {
   return (
     <div>
         <TopBar/>
-        <div className="flex items-start items-stretch"  style={{height: 'calc(100vh - 65px)'}}>
+        <div className="flex items-stretch bg-gray-300"  style={{height: 'calc(100vh - 65px)'}}>
           <Sidebar/>
           <div className="w-full h-full">
             <InnerTopBar />
