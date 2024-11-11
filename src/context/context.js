@@ -1,10 +1,12 @@
 'use client'
 
+import Navbar from "@/components/Navbar";
 import { createContext, useState } from "react";
 
 export const ShapesContext = createContext()
 
 export const MyProvider = ({ children }) => {
+
   const [shapes, setShapes] = useState([]);
   const [shapesTopBar, setshapesTopBar] = useState(false);
   const [innerMenuName, setInnerMenuName] = useState('');

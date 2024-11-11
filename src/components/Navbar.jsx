@@ -10,7 +10,7 @@ const Navbar = () => {
                     </Link>
                     <div className='h-full flex items-center space-x-4'>
                         <Link
-                            href='/api/auth/register'
+                            href='/signup'
                             className={buttonVariants({
                                 size: 'sm',
                                 variant: 'ghost',
