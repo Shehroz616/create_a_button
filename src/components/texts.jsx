@@ -5,7 +5,7 @@ import { ShapesContext } from '@/context/context';
 
 const Texts = () => {
 
-    const { shapes, setShapes } = useContext(ShapesContext);
+    const { shapes, updateShapes } = useContext(ShapesContext);
     const addText = (text, fontSize, w, h ) => {
         const newText = {
           id: Date.now(),
@@ -18,7 +18,7 @@ const Texts = () => {
           fontSize: fontSize,
           fill: '#000',
         };
-        setShapes([...shapes, newText]);
+        updateShapes([...shapes, newText]);
     };
     return (
         <div className='grid grid-cols-3 gap-3'>

@@ -5,7 +5,7 @@ import { ShapesContext } from '@/context/context';
 
 const Shapes = () => {
 
-    const { shapes, setShapes } = useContext(ShapesContext);
+    const { shapes, updateShapes } = useContext(ShapesContext);
     
 
     // Function to add shape to the canvas
@@ -23,7 +23,8 @@ const Shapes = () => {
             newShape.radius = radius
             
         }
-        setShapes([...shapes, newShape]);
+
+        updateShapes([...shapes, newShape]);
     };
 
     return (

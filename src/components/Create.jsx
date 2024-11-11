@@ -6,7 +6,7 @@ import { ShapesContext } from '@/context/context';
 import { CopyPlus, Trash2} from 'lucide-react';
 
 const KonvaCanvas = () => {
-    const { shapes, setShapes, shapesTopBar, setshapesTopBar, selectedShapeId, setSelectedShapeId } = useContext(ShapesContext);
+    const { shapes, setShapes, setshapesTopBar, selectedShapeId, setSelectedShapeId, updateShapes } = useContext(ShapesContext);
     // const [containerSize, setContainerSize] = useState({ width: 500, height: 500 });
     const [popupPosition, setPopupPosition] = useState(null);
     const [textPosition, setTextPosition] = useState(null);
@@ -42,22 +42,6 @@ const KonvaCanvas = () => {
         }
     }, [selectedShapeId, shapes]);
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (containerRef.current) {
-                const { offsetWidth, offsetHeight } = containerRef.current;
-                // setContainerSize({
-                //     width: offsetWidth * 0.4,
-                //     height: offsetHeight * 0.6,
-                // });
-            }
-        };
-
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
     const handleDragMove = (shape) => {
         const newShapes = shapes.map((s) => {
             if (s.id === shape.id) {
@@ -66,14 +50,12 @@ const KonvaCanvas = () => {
             return s;
         });
         setShapes(newShapes);
-        if (shape.id === selectedShapeId) {
-            // setPopupPosition({ x: shape.x, y: shape.y });
-        }
     };
+
 
     const handleDelete = () => {
         const newShapes = shapes.filter((s) => s.id !== selectedShapeId);
-        setShapes(newShapes);
+        updateShapes(newShapes);
         setSelectedShapeId(null);
         setPopupPosition(null);
         setTextPosition(null);
@@ -100,7 +82,7 @@ const KonvaCanvas = () => {
         const shapeToDuplicate = shapes.find((s) => s.id === selectedShapeId);
         if (shapeToDuplicate) {
             const newShape = { ...shapeToDuplicate, id: Date.now(), x: shapeToDuplicate.x + 20, y: shapeToDuplicate.y + 20 };
-            setShapes([...shapes, newShape]);
+            updateShapes([...shapes, newShape]);
         }
     };
 
@@ -113,16 +95,13 @@ const KonvaCanvas = () => {
           }
           return shape;
         });
-        setShapes(newShapes);
+        updateShapes(newShapes);
     };
 
-    // const boxSize = containerSize.width / 20;
-    // const rows = Math.ceil(containerSize.height / boxSize);
-    // const cols = Math.ceil(containerSize.width / boxSize);
 
     return (
         <div className='w-full flex items-center justify-center' style={{height: 'calc(100% - 65px)'}} ref={containerRef}>
-            <div className='bg-white border border-gray-300 overflow-hidden rounded-full aspect-square' style={{ position: 'relative', width: '500px' }}>
+            <div className='bg-white border border-gray-300 overflow-hidden rounded-full aspect-square' style={{ position: 'relative', width: '300px' }}>
                 {/* Checkerboard Background */}
                 {/* <Stage width={containerSize.width} height={containerSize.height}>
                     <Layer>
@@ -142,7 +121,7 @@ const KonvaCanvas = () => {
                 </Stage> */}
 
                 {/* Transparent Canvas Overlay */}
-                <Stage ref={stageRef} width={500} height={500} style={{borderRadius:'50%', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                <Stage ref={stageRef} width={300} height={300} style={{borderRadius:'50%', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                     onMouseDown={(e) => {
                         if (e.target === e.target.getStage()) {
                             setSelectedShapeId(null);
@@ -169,6 +148,7 @@ const KonvaCanvas = () => {
                                 onClick: (e) => handleSelect(shape.id, e.target.x(), e.target.y(), e.target.getClientRect()),
                                 onTap: (e) => handleSelect(shape.id, e.target.x(), e.target.y(), e.target.getClientRect()),
                                 onDragMove: (e) => handleDragMove({ ...shape, x: e.target.x(), y: e.target.y() }),
+                                onDragStart: (e) => updateShapes(shapes),
                                 onTransformEnd: (e) => {
                                     const node = e.target;
                                     const width = node.width() * node.scaleX();
@@ -178,7 +158,7 @@ const KonvaCanvas = () => {
                                     );
                                     setPopupPosition({ x: node.x() + width / 2, y: node.y() });
                                     setTextPosition({ x: node.x(), y: node.y() });
-                                    setShapes(newShapes);
+                                    updateShapes(newShapes);
                                     node.scaleX(1);
                                     node.scaleY(1);
                                 }
@@ -201,7 +181,7 @@ const KonvaCanvas = () => {
                                             );
                                             setPopupPosition({ x: node.x() + width / 2, y: node.y() });
                                             setTextPosition({ x: node.x(), y: node.y() });
-                                            setShapes(newShapes);
+                                            updateShapes(newShapes);
                                             node.scaleX(1);
                                             node.scaleY(1);
                                         }}/>;

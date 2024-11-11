@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { HexColorPicker, HexColorInput } from 'react-colorful';
 import { ShapesContext } from '@/context/context';
 
 const Colors = () => {
   const [color, setColor] = useState('#121212');
-  const { shapes, setShapes, selectedShapeId } = useContext(ShapesContext);
+  const [localColor, setLocalColor] = useState('#121212');
+  const { shapes, selectedShapeId, updateShapes } = useContext(ShapesContext);
 
-  const updateColor = (e) => {
+  const updateColorComplete = (e) => {
+    console.log(e);
     const newShapes = shapes.map((shape) => {
       if (shape.id === selectedShapeId) {
         return { ...shape, fill: e };
@@ -16,15 +18,24 @@ const Colors = () => {
       return shape;
     });
     setColor(e);
-    setShapes(newShapes);
-  }
+    updateShapes(newShapes);
+  };
 
   return (
     <div className="flex flex-col items-center bg-gray-100 rounded-lg">
-      <HexColorPicker color={color} onChange={updateColor} />
+      <HexColorPicker
+        color={localColor}
+        onChange={setLocalColor}
+        onChangeComplete={updateColorComplete}
+      />
       <div className="flex justify-between mt-5 items-center">
         <span>Hex</span>
-        <HexColorInput color={color} onChange={updateColor} className='outline-0 bg-gray-100 py-1 px-3 w-7/12 text-sm border border-gray-300 rounded-sm'/>
+        <HexColorInput
+          color={localColor}
+          onChange={setLocalColor}
+          onChangeComplete={updateColorComplete}
+          className="outline-0 bg-gray-100 py-1 px-3 w-7/12 text-sm border border-gray-300 rounded-sm"
+        />
       </div>
     </div>
   );
