@@ -9,18 +9,36 @@ export default function SigninForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const result = await signIn('credentials', {
-            redirect: false,
-            email,
-            password,
-        });
 
-        if (result.error) {
-            console.error(result.error);
-        } else {
-            // Handle successful sign-in
-            console.log('Signed in successfully');
-        }
+
+        try {
+            let response = await fetch(
+              `https://harri-backend-git-master-rubab786786s-projects.vercel.app/api/user/login`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+              }
+            );
+            console.log("response", response);
+            response = await response.json();
+            if (response.message == "Successfully logged in") {
+                
+                const result = await signIn('credentials', {
+                    redirect: false,
+                    email,
+                    password,
+                });
+            }
+            else{
+                console.log(response);
+            }
+          } catch (error) {
+            console.error("Error submitting form:", error);
+          }
+          
+          
+
     };
 
     return (

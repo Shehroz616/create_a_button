@@ -6,7 +6,11 @@ import Link from 'next/link';
 const SignupForm = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
+    const [disableBtn, setDisableBtn] = useState(false);
+    const [error, setError] = useState({
+      confirmPassword:"",
+      email:"",
+    });
     const [formData, setFormData] = useState({})
   
     const handleChange = (event) => {
@@ -19,6 +23,7 @@ const SignupForm = () => {
   
     const handleSubmit = async (event) => {
       event.preventDefault()
+      setDisableBtn(true)
       try {
         console.log(formData)
         let response = await fetch(`https://harri-backend-git-master-rubab786786s-projects.vercel.app/api/user/signup`, {
@@ -28,16 +33,25 @@ const SignupForm = () => {
         })
         response = await response.json()
         console.log(response)
+        if (response.message == "Email already exists") {
+          setError((prev) => ({ ...prev, email: response.message }))
+          setDisableBtn(false)
+        } else{
+          setError((prev) => ({ ...prev, email: "" }))
+          setDisableBtn(false)
+
+        }
       } catch (error) {
         console.error('Error submitting form:', error)
+        setDisableBtn(false)
       }
     }
   
     useEffect(() => {
       if (confirmPassword && password !== confirmPassword) {
-        setError('Passwords do not match');
+        setError((prev) => ({ ...prev, confirmPassword: 'Password does not match' })) ;
       } else {
-        setError('');
+        setError((prev) => ({ ...prev, confirmPassword: '' }));
         setFormData((prev) => ({
           ...prev,
           password: password
@@ -61,6 +75,7 @@ const SignupForm = () => {
               <div>
                 <label className="text-gray-800 text-sm mb-2 block">Email Id</label>
                 <input onChange={handleChange} name="email" type="text" className="bg-gray-100 focus:bg-transparent w-full text-sm text-gray-800 px-4 py-3 rounded-md outline-green-600 transition-all" placeholder="Enter email" />
+                {error.email && <p className="text-red-500 text-sm mt-2">{error.email}</p>}
               </div>
               <div>
                 <label className="text-gray-800 text-sm mb-2 block">Password</label>
@@ -69,12 +84,11 @@ const SignupForm = () => {
               <div>
                 <label className="text-gray-800 text-sm mb-2 block">Confirm Password</label>
                 <input onChange={(e) => setConfirmPassword(e.target.value)} name="cpassword" type="password" className="bg-gray-100 focus:bg-transparent w-full text-sm text-gray-800 px-4 py-3 rounded-md outline-green-600 transition-all" placeholder="Enter confirm password" />
-                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+                {error.confirmPassword && <p className="text-red-500 text-sm mt-2">{error.confirmPassword}</p>}
               </div>
             </div>
             <div className="mt-8">
-              <button type="submit" className="py-3 px-6 text-xl tracking-wider font-semibold rounded-md text-white bg-green-600 hover:bg-blue-600 focus:outline-none w-full">                Sign up
-              </button>
+              <button type="submit" disabled={disableBtn? true:false} className="py-3 px-6 text-xl tracking-wider font-semibold rounded-md text-white bg-green-600 disabled:opacity-75 focus:outline-none w-full">Sign up</button>
             </div>
             <div
               className="my-8 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">

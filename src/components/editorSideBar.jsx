@@ -7,6 +7,7 @@ import { Button } from './ui/button'
 import Shapes from './shapes';
 import Colors from './colors';
 import Texts from './texts';
+import Images from './images';
 
 const Sidebar = () => {
 
@@ -23,7 +24,7 @@ const Sidebar = () => {
                 return <Texts />;
             case 'Images':
 
-                return <div>Images content here...</div>;
+                return <Images />;
             case 'Uploads':
 
                 return <div>Uploads content here...</div>;
@@ -78,7 +79,7 @@ const Sidebar = () => {
                             <X size={20} color="#454545" strokeWidth={1.25} />
                         </Button>
                     </div>
-                    <div className='p-4 w-max min-w-full'>
+                    <div className='p-4 min-w-full'>
                         {renderContent()}
                     </div>
                 </div>

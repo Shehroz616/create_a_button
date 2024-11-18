@@ -15,7 +15,6 @@ export const MyProvider = ({ children }) => {
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const updateShapes = (newShapes) => {
-    console.log(undoStack);
     setUndoStack([...undoStack, shapes]);
     setRedoStack([]);
     setShapes(newShapes);

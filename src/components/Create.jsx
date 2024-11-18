@@ -1,7 +1,7 @@
 'use client';
 
 import { useContext, useState, useRef, useEffect } from 'react';
-import { Stage, Layer, Rect, Circle, Transformer, Text } from 'react-konva';
+import { Stage, Layer, Rect, Circle, Transformer, Text, Image } from 'react-konva';
 import { ShapesContext } from '@/context/context';
 import { CopyPlus, Trash2} from 'lucide-react';
 
@@ -185,6 +185,8 @@ const KonvaCanvas = () => {
                                             node.scaleX(1);
                                             node.scaleY(1);
                                         }}/>;
+                            } else if (shape.type === 'image') {
+                                return <Image key={shape.id} {...commonProps} image={shape.img} />;
                             }
                             return null;
                         })}

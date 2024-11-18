@@ -1,6 +1,6 @@
-import React from 'react'
 import GoogleButton from '@/components/googleButton'
 import SignupForm from '@/components/signupForm'
+import Link from 'next/link'
 
 
 
@@ -15,6 +15,7 @@ const Signup = () => {
 
            <SignupForm/>
             <GoogleButton/>
+            <p className='mt-10 text-center'>Already have an account? <Link href='/signin' className='text-green-600'>Signin</Link></p>
           </div>
         </div>
       </>
