@@ -45,8 +45,8 @@ export default function Home() {
               <Link
                   href='/create'
                   className={buttonVariants({
-                      size: 'md',
-                      className: 'items-center gap-1',
+                      size: 'lg',
+                      className: 'flex items-center gap-1 text-xl',
                   })}>
                   Create
               </Link>
