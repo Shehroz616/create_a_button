@@ -21,7 +21,7 @@ const Texts = () => {
         updateShapes([...shapes, newText]);
     };
     return (
-        <div className='grid grid-cols-3 gap-3'>
+        <div className='grid lg:grid-cols-3 grid-cols-4 gap-3'>
             <div className="bg-white shadow-md p-1 rounded-md cursor-pointer aspect-square flex items-center justify-center"
                 onClick={() => addText('Title', 36, 80, 40)}>
                 <h1 className='text-3xl'>Title</h1>

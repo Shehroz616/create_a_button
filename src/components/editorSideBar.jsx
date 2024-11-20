@@ -2,9 +2,9 @@
 
 import React, { useState, useContext } from 'react';
 import { ShapesContext } from '@/context/context';
-import { Square, Type, Image, UploadCloud, X } from 'lucide-react';
+import { Shapes, Square, Type, Image, UploadCloud, X } from 'lucide-react';
 import { Button } from './ui/button'
-import Shapes from './shapes';
+import ShapesMenu from './shapes';
 import Colors from './colors';
 import Texts from './texts';
 import Images from './images';
@@ -19,7 +19,7 @@ const Sidebar = () => {
     const renderContent = () => {
         switch (activeMenu) {
             case 'Shapes':
-                return <Shapes />
+                return <ShapesMenu />
             case 'Text':
                 return <Texts />;
             case 'Images':
@@ -39,12 +39,12 @@ const Sidebar = () => {
     };
 
     return (
-        <div className='flex items-stretch'>
-            <div className="w-20 border-r border-gray-300 bg-gray-100 backdrop-blur-lg transition-all flex flex-col items-center py-3 px-1  space-y-4">
+        <div className='flex items-stretch lg:flex-row flex-col-reverse'>
+            <div className="z-50 lg:w-20 w-full border-r border-gray-300 bg-gray-100 backdrop-blur-lg transition-all flex lg:flex-col flex-row items-center py-3 px-1  lg:space-y-4">
                 <Button variant="ghost"
                     className={`flex flex-col items-center  py-7 w-full ${activeMenu === 'Shapes' ? 'bg-white shadow hover:bg-white' : null}`}
                     onClick={() => handleMenuClick('Shapes')}>
-                    <Square className="w-6 h-6 mb-0" />
+                    <Shapes className="w-6 h-6 mb-0" />
                     <span className="text-xs">Shapes</span>
                 </Button>
 
@@ -70,9 +70,9 @@ const Sidebar = () => {
                 </Button>
 
             </div>
-            <div className={`relative transition-all duration-300 ${activeMenu || subActiveMenu ? 'w-64' : 'w-0'} `}>
+            <div className={`relative  transition-all w-full duration-300 ${activeMenu || subActiveMenu ? 'lg:w-64  lg:h-auto h-80 ' : 'lg:w-0  h-0 lg:h-auto'} `}>
                 <div
-                    className={`border-r border-l border-gray-300 bg-gray-100 transition-all duration-300  ${activeMenu ? 'w-64' : 'w-0'} overflow-hidden  h-full`}>
+                    className={`z-30 border-r border-l border-gray-300 bg-gray-100 transition-all duration-300 w-full  ${activeMenu ? 'lg:w-64 h-80' : 'lg:w-0 h-0'} overflow-hidden  lg:h-full`}>
                     <div className='flex justify-between px-4 py-3 border-b border-gray-300'>
                         {menuName}
                         <Button className="p-0 h-auto" variant="ghost" onClick={() => setActiveMenu(null)}>
@@ -83,7 +83,7 @@ const Sidebar = () => {
                         {renderContent()}
                     </div>
                 </div>
-                <div className={`z-10 absolute top-0 left-0 h-full transition-all duration-300 overflow-hidden ${subActiveMenu ? 'w-64' : 'w-0'} bg-gray-100`}>
+                <div className={`z-40 absolute top-0 left-0 lg:h-full transition-all duration-300 overflow-hidden w-full ${subActiveMenu ? 'lg:w-64 h-80' : 'lg:w-0 h-0'} bg-gray-100`}>
                     <div className='flex justify-between px-4 py-3 border-b border-gray-300'>
                         {innerMenuName}
                         <Button className="p-0 h-auto" variant="ghost" onClick={() => setSubActiveMenu(null)}>

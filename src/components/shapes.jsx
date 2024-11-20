@@ -28,7 +28,7 @@ const Shapes = () => {
     };
 
     return (
-        <div className='grid grid-cols-3 gap-4'>
+        <div className='grid lg:grid-cols-3 grid-cols-4 gap-4'>
             <div className="bg-white shadow-md p-1 rounded-md cursor-pointer"
                 onClick={() => addShape('square',100,100)}>
                 <div className='w-full aspect-square bg-gray-500 rounded-sm'></div>
