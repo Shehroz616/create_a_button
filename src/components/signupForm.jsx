@@ -26,7 +26,7 @@ const SignupForm = () => {
       setDisableBtn(true)
       try {
         console.log(formData)
-        let response = await fetch(`https://harri-backend-git-master-rubab786786s-projects.vercel.app/api/user/signup`, {
+        let response = await fetch(`https://create-a-button-backend.vercel.app/api/user/signup`, {
           method: 'POST',
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),

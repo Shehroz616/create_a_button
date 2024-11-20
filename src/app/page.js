@@ -48,7 +48,7 @@ export default function Home() {
                       size: 'lg',
                       className: 'flex items-center gap-1 text-xl',
                   })}>
-                  Create
+                  Create Now
               </Link>
 
               <div className='mt-12 flex flex-col sm:flex-row items-center sm:items-start gap-5'>

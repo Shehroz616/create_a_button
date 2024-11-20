@@ -15,21 +15,22 @@ export default function SigninForm() {
 
         try {
             let response = await fetch(
-              `https://harri-backend-git-master-rubab786786s-projects.vercel.app/api/user/login`,
+              `https://create-a-button-backend.vercel.app/api/user/login`,
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password, isGoogleSignUp: false }),
               }
             );
-            console.log("response", response);
             response = await response.json();
+            console.log("response", response);
             if (response.message == "Successfully logged in") {
                 
                 const result = await signIn('credentials', {
-                    redirect: true,
+                    redirect: false,
                     email,
                     password,
+                    token:response.token
                 });
                 setError("");
             }

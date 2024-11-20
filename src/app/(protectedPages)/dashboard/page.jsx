@@ -11,7 +11,7 @@ export default function Dashboard() {
         }}
       > 
           Dashboard
-          <button type="buto">Sign Out</button>
+          <button>Sign Out</button>
         </form>
     </>
   )

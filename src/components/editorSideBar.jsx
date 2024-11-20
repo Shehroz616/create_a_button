@@ -70,9 +70,9 @@ const Sidebar = () => {
                 </Button>
 
             </div>
-            <div className={`relative  transition-all w-full duration-300 ${activeMenu || subActiveMenu ? 'lg:w-64  lg:h-auto h-80 ' : 'lg:w-0  h-0 lg:h-auto'} `}>
+            <div className={`lg:relative absolute lg:bottom-auto bottom-20 transition-all w-full duration-300 ${activeMenu || subActiveMenu ? 'lg:w-64  lg:h-auto h-96 ' : 'lg:w-0  h-0 lg:h-auto'} `}>
                 <div
-                    className={`z-30 border-r border-l border-gray-300 bg-gray-100 transition-all duration-300 w-full  ${activeMenu ? 'lg:w-64 h-80' : 'lg:w-0 h-0'} overflow-hidden  lg:h-full`}>
+                    className={`relative z-30 border-r border-l border-gray-300 bg-gray-100 transition-all duration-300 w-full  ${activeMenu ? 'lg:w-64 h-96' : 'lg:w-0 h-0'} overflow-hidden  lg:h-full`}>
                     <div className='flex justify-between px-4 py-3 border-b border-gray-300'>
                         {menuName}
                         <Button className="p-0 h-auto" variant="ghost" onClick={() => setActiveMenu(null)}>
@@ -83,7 +83,7 @@ const Sidebar = () => {
                         {renderContent()}
                     </div>
                 </div>
-                <div className={`z-40 absolute top-0 left-0 lg:h-full transition-all duration-300 overflow-hidden w-full ${subActiveMenu ? 'lg:w-64 h-80' : 'lg:w-0 h-0'} bg-gray-100`}>
+                <div className={`z-40 absolute top-0 left-0 lg:h-full transition-all duration-300 overflow-hidden w-full ${subActiveMenu ? 'lg:w-64 h-96' : 'lg:w-0 h-0'} bg-gray-100`}>
                     <div className='flex justify-between px-4 py-3 border-b border-gray-300'>
                         {innerMenuName}
                         <Button className="p-0 h-auto" variant="ghost" onClick={() => setSubActiveMenu(null)}>
