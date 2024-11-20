@@ -24,10 +24,10 @@ export default function Home() {
                 Button
               </h1>
               <p className='mt-8 text-lg lg:pr-10 max-w-prose text-center lg:text-left text-balance md:text-wrap'>
-              At CreateAButton, you can design your very own, unique button to showcase your style or message. Protect and express your individuality with our custom buttons.
+                At CreateAButton, you can design your very own, unique button to showcase your style or message. Protect and express your individuality with our custom buttons.
               </p>
 
-              <ul className='mt-8 space-y-2 text-left font-medium flex flex-col items-center sm:items-start'>
+              <ul className='my-8 space-y-2 text-left font-medium flex flex-col items-center sm:items-start'>
                 <div className='space-y-2'>
                   <li className='flex gap-1.5 items-center text-left'>
                     <Check className='h-5 w-5 shrink-0 text-green-600' />
@@ -42,6 +42,14 @@ export default function Home() {
                   </li>
                 </div>
               </ul>
+              <Link
+                  href='/create'
+                  className={buttonVariants({
+                      size: 'sm',
+                      className: 'hidden sm:flex items-center gap-1',
+                  })}>
+                  Create
+              </Link>
 
               <div className='mt-12 flex flex-col sm:flex-row items-center sm:items-start gap-5'>
                 <div className='flex -space-x-4'>
