@@ -2,28 +2,8 @@ import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 
-// const bcrypt = require('bcrypt');
-
 const getUserFromDb = async (email, pwHash) => {
-  // if (email == 'abcd@gmail.com' && pwHash == '123456798') {
-  //     return {
-  //       id: 1,
-  //       email:"abcd@gmail.com",
-  //       pwHash:"123456798",
-  //       name: "John Doe",
-  //       image: "https://example.com/image.jpg",
-  //     }
-  // }
-  //   const saltRounds = 10;
-  //   let pwHash2 =  bcrypt.hash(pwHash, saltRounds, function(err, hash) {
-  //     if (err) {
-  //         console.error(err);
-  //         return;
-  //         // Store hash in your password DB.
-  //       }
-  //     console.log('Hashed password:', hash);
-  //     return hash;
-  // });
+
 
   let loginData = {
     email: email,

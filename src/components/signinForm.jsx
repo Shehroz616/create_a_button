@@ -27,7 +27,7 @@ export default function SigninForm() {
             if (response.message == "Successfully logged in") {
                 
                 const result = await signIn('credentials', {
-                    redirect: false,
+                    redirect: true,
                     email,
                     password,
                     token:response.token
@@ -43,9 +43,6 @@ export default function SigninForm() {
             console.error("Error submitting form:", error);
             setDisableBtn(false)
           }
-          
-          
-
     };
 
     return (
